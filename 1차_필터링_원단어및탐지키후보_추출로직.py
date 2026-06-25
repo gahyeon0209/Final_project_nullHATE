@@ -356,7 +356,7 @@ if MODE == "generate":
 
     candidate_file = f"pattern_candidates_{int(time.time())}.xlsx"
 
-    print("💾 후보 파일 저장 중...")
+    print("후보 파일 저장 중...")
 
     with pd.ExcelWriter(candidate_file, engine="openpyxl") as writer:
         candidates.to_excel(writer, index=False, sheet_name="pattern_candidates")
