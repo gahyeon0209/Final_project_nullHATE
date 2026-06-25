@@ -30,7 +30,7 @@ MATCH_MODE = "typed"
 # 1. 파일 불러오기
 # =====================================================
 
-print("📂 파일 불러오는 중...")
+print("파일 불러오는 중")
 
 df = pd.read_excel(input_path)
 
@@ -49,7 +49,7 @@ df["bw_text"] = df["bw_text"].astype(str).str.strip()
 df["variant_word"] = df["variant_word"].astype(str).str.strip()
 df["row_id"] = range(1, len(df) + 1)
 
-print(f"✅ 파일 로딩 완료: {len(df)} rows")
+print(f"파일 로딩 완료: {len(df)} rows")
 
 
 # =====================================================
@@ -158,7 +158,7 @@ def extract_mutation_units(original, variant, row_id):
 # 4. 전체 mutation unit 생성
 # =====================================================
 
-print("⚙️ 전체 데이터 변형 단위 추출 중...")
+print("전체 데이터 변형 단위 추출 중")
 
 all_units = []
 
@@ -179,7 +179,7 @@ unit_df = pd.DataFrame(all_units)
 if len(unit_df) == 0:
     raise ValueError("추출된 변형 단위가 없습니다.")
 
-print(f"✅ 변형 단위 추출 완료: {len(unit_df)} units")
+print(f"변형 단위 추출 완료: {len(unit_df)} units")
 
 
 # =====================================================
@@ -236,7 +236,7 @@ def make_pattern_desc(row):
 # =====================================================
 
 def generate_candidates():
-    print("🔍 동일 원단어 100건 이상 그룹에서 후보 도출 중...")
+    print("동일 원단어 100건 이상 그룹에서 후보 도출 중")
 
     eligible_words = (
         df.groupby("bw_text")
@@ -362,8 +362,8 @@ if MODE == "generate":
         candidates.to_excel(writer, index=False, sheet_name="pattern_candidates")
         unit_df.to_excel(writer, index=False, sheet_name="all_mutation_units")
 
-    print(f"✅ 후보 파일 생성 완료: {candidate_file}")
-    print("👉 파일 열어서 pattern_id 확인 후, MODE='validate'로 바꿔 다시 실행하세요.")
+    print(f"후보 파일 생성 완료: {candidate_file}")
+    print("파일 열어서 pattern_id 확인 후, MODE='validate'로 바꿔 다시 실행하세요.")
 
 
 # =====================================================
@@ -384,11 +384,11 @@ elif MODE == "validate":
 
     selected = selected.iloc[0]
 
-    print("\n✅ 선택된 패턴")
+    print("\n선택된 패턴")
     print(selected["pattern_desc"])
     print("예시:", selected["examples"])
 
-    print("\n🔎 선택 패턴으로 전체 buffer 검증 중...")
+    print("\n선택 패턴으로 전체 buffer 검증 중...")
 
     matched_units = unit_df[
         unit_df.apply(
@@ -403,7 +403,7 @@ elif MODE == "validate":
 
     evi_cnt = matched_rows["row_id"].nunique()
 
-    print("\n✅ 검증 완료")
+    print("\n검증 완료")
     print(f"evi_cnt = {evi_cnt}")
 
     key_candidate = pd.DataFrame([{
@@ -441,14 +441,14 @@ elif MODE == "validate":
 
     output_file = f"pattern_validation_{selected_id}_{int(time.time())}.xlsx"
 
-    print("💾 검증 결과 저장 중...")
+    print("검증 결과 저장 중...")
 
     with pd.ExcelWriter(output_file, engine="openpyxl") as writer:
         key_candidate.to_excel(writer, index=False, sheet_name="selected_key_candidate")
         candidate_evidence.to_excel(writer, index=False, sheet_name="candidate_evidence")
         matched_units.to_excel(writer, index=False, sheet_name="matched_units")
 
-    print(f"✅ 저장 완료: {output_file}")
+    print(f"저장 완료: {output_file}")
 
 
 else:
